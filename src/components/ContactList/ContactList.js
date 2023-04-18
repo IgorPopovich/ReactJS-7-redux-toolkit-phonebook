@@ -2,18 +2,27 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import css from './ContactList.module.css';
 import {useDispatch} from 'react-redux';
-import { contactsOperations } from '../../redux/contacts';
+import { contactsOperations, contactsSelectors } from '../../redux/contacts';
 import Loader from '../Loader/Loader';
+
 import PropTypes from 'prop-types';
 
-const ContactList = ({ contacts }) => {
-    const { isLoading } = useSelector(state => state.contacts.contacts)
+const ContactList = () => {
+
     const dispatch = useDispatch()
+    const { isLoading } = useSelector(state => state.contacts.contacts)
+    const contacts = useSelector(contactsSelectors.getContacts)
+    const filter = useSelector(state => state.contacts.filter)
+  
+    const normalSize = filter.toLocaleLowerCase()
+    const visibleContacts = contacts.filter(contact => 
+      contact.name.toLocaleLowerCase().includes(normalSize)
+    )
 
     return <div>
         <ul className={css.contacts}>
         {isLoading && <Loader />}
-            {contacts.length > 0 && contacts.map(( {id, name, phone} ) => (
+            {visibleContacts.length > 0 && contacts.map(( {id, name, phone} ) => (
                 <li className={css.item} key={id}>
                     <p className={css.text}>{name}</p>
                     <p className={css.text}>{phone}</p>

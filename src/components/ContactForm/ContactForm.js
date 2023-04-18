@@ -34,14 +34,14 @@ const ContactForm = () => {
       phone: number,
       id: nanoid()
     } 
-    for (let item of contacts) {
-      if (item.name.includes(newContact.name)) {
-        alert(`${newContact.name} is already in contacts`)
-        setNume('')
-        setNumber('')
-        return;
-      }
+
+    if (contacts.find(contact => contact.name.toLowerCase() === newContact.name.toLowerCase())) {
+      alert(`${newContact.name} is already in contacts`)
+      setNume('')
+      setNumber('')
+      return;
     }
+
     dispatch(contactsOperations.addContact(newContact))
     setNume('')
     setNumber('')

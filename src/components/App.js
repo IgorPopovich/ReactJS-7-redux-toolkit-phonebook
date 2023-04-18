@@ -3,20 +3,13 @@ import ContactList from './ContactList/ContactList';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import {useDispatch, useSelector } from 'react-redux'
-import { contactsOperations, contactsSelectors } from '../redux/contacts';
+import { contactsOperations } from '../redux/contacts';
 import css from './App.module.css';
 import PropTypes from 'prop-types';
 
 export const App = () => {
-  const contacts = useSelector(contactsSelectors.getContacts)
   const dispatch = useDispatch()
   const { error } = useSelector(state => state.contacts.contacts)
-  const filter = useSelector(state => state.contacts.filter)
-
-  const normalSize = filter.toLocaleLowerCase()
-  const visibleContacts = contacts.filter(contact => 
-    contact.name.toLocaleLowerCase().includes(normalSize)
-  )
 
   useEffect(() => {
     dispatch(contactsOperations.fetchContacts())
@@ -30,7 +23,7 @@ export const App = () => {
             <ContactForm />
             <h2 className={css.title}>Contacts</h2>
             <Filter />
-            <ContactList contacts={visibleContacts} />
+            <ContactList />
           </div>
         </div>
         );
